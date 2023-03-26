@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: '18'
           check-latest: true
+          cache: 'yarn'
       - uses: actions/cache@v3
         id: cached-dependencies
         with:
