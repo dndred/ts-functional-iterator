@@ -97,6 +97,8 @@ class FuncIterator<T> implements IterableIterator<T> {
   }
 }
 
+export const testFunction = () => 2;
+
 const funcIterator = <T>(iterable: IterableIterator<T> | readonly T[]): FuncIterator<T> => {
   return new FuncIterator(iterable);
 };
