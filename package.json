@@ -40,5 +40,5 @@
   },
   "author": "Andrei Danilov <dndred@gmail.com>",
   "license": "GPL",
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@4.0.0-rc.40"
 }
