@@ -13,14 +13,7 @@ jobs:
         with:
           node-version: '18'
           check-latest: true
-      - uses: actions/cache@v3
-        id: cached-dependencies
-        with:
-          path: |
-            **/node_modules
-            .yarn/cache/**
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn lint
       - run: yarn test
