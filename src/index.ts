@@ -95,6 +95,14 @@ class FuncIterator<T> implements IterableIterator<T> {
   join(separator = ','): string {
     return this.toArray().join(separator);
   }
+
+  length(): number {
+    let length = 0;
+    while (!this.next().done) {
+      length++;
+    }
+    return length;
+  }
 }
 
 const funcIterator = <T>(iterable: IterableIterator<T> | readonly T[]): FuncIterator<T> => {

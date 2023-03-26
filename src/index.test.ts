@@ -119,4 +119,17 @@ describe('funcIterator', () => {
         .reduce((previousValue, currentValue) => previousValue + currentValue, 10),
     ).toBe(20);
   });
+
+  it('length', () => {
+    let iter = funcIterator(array);
+    expect(iter.length()).toBe(3);
+    expect(iter.length()).toBe(0);
+
+    iter = funcIterator(array);
+    iter.next();
+    expect(iter.length()).toBe(2);
+
+    iter = funcIterator([]);
+    expect(iter.length()).toBe(0);
+  });
 });
