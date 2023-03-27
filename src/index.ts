@@ -3,13 +3,35 @@ const iterationDone: { done: true; value: undefined } = {
   value: undefined,
 };
 
+const arrayIterator = <T>(array: ArrayLike<T>): IterableIterator<T> => {
+  let index = 0;
+  const iterator = {
+    [Symbol.iterator](): IterableIterator<T> {
+      return iterator;
+    },
+    next: () => {
+      if (index >= array.length) {
+        return iterationDone;
+      }
+      index++;
+
+      return {
+        done: false,
+        value: array[index - 1],
+      };
+    },
+  };
+
+  return iterator;
+};
+
 class FuncIterator<T> implements IterableIterator<T> {
   private readonly iterable: IterableIterator<T>;
-  constructor(iterable: IterableIterator<T> | readonly T[]) {
-    if ('values' in iterable) {
-      this.iterable = iterable.values();
-    } else {
+  constructor(iterable: IterableIterator<T> | ArrayLike<T>) {
+    if ('next' in iterable) {
       this.iterable = iterable;
+    } else {
+      this.iterable = arrayIterator(iterable);
     }
   }
 
@@ -105,7 +127,7 @@ class FuncIterator<T> implements IterableIterator<T> {
   }
 }
 
-const funcIterator = <T>(iterable: IterableIterator<T> | readonly T[]): FuncIterator<T> => {
+const funcIterator = <T>(iterable: IterableIterator<T> | ArrayLike<T>): FuncIterator<T> => {
   return new FuncIterator(iterable);
 };
 

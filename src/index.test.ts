@@ -132,4 +132,12 @@ describe('funcIterator', () => {
     iter = funcIterator([]);
     expect(iter.length()).toBe(0);
   });
+
+  it('array like', () => {
+    let iter = funcIterator<number>({ length: 3 });
+    expect(iter.map((_, index) => index).toArray()).toStrictEqual([0, 1, 2]);
+
+    iter = funcIterator(Array.from({ length: 3 }));
+    expect(iter.map((_, index) => index).toArray()).toStrictEqual([0, 1, 2]);
+  });
 });
