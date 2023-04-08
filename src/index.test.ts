@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import funcIterator from './';
+import funcIterator, { product } from './';
 
 describe('funcIterator', () => {
   const array = [1, 2, 3];
@@ -139,5 +139,46 @@ describe('funcIterator', () => {
 
     iter = funcIterator(Array.from({ length: 3 }));
     expect(iter.map((_, index) => index).toArray()).toStrictEqual([0, 1, 2]);
+  });
+
+  describe('product function', () => {
+    it('should return an empty iterator when given empty arrays', () => {
+      const result = [...product([], [])];
+      expect(result).toEqual([]);
+    });
+
+    it('should return an iterator that yields all pairs of elements from the two arrays', () => {
+      const result = product([1, 2], ['a', 'b']).toArray();
+      expect(result).toEqual([
+        [1, 'a'],
+        [1, 'b'],
+        [2, 'a'],
+        [2, 'b'],
+      ]);
+    });
+
+    it('should work with arrays of different lengths', () => {
+      const result = [...product([1, 2, 3], ['a', 'b'])];
+      expect(result).toEqual([
+        [1, 'a'],
+        [1, 'b'],
+        [2, 'a'],
+        [2, 'b'],
+        [3, 'a'],
+        [3, 'b'],
+      ]);
+    });
+
+    it('should work with arrays of different types', () => {
+      const result = [...product([1, 2], ['a', 'b', 'c'])];
+      expect(result).toEqual([
+        [1, 'a'],
+        [1, 'b'],
+        [1, 'c'],
+        [2, 'a'],
+        [2, 'b'],
+        [2, 'c'],
+      ]);
+    });
   });
 });

@@ -131,4 +131,32 @@ const funcIterator = <T>(iterable: IterableIterator<T> | ArrayLike<T>): FuncIter
   return new FuncIterator(iterable);
 };
 
+export function product<T0, T1>(array0: ArrayLike<T0>, array1: ArrayLike<T1>): FuncIterator<[T0, T1]> {
+  let index0 = 0;
+  let index1 = 0;
+  const iterator: IterableIterator<[T0, T1]> = {
+    [Symbol.iterator](): IterableIterator<[T0, T1]> {
+      return iterator;
+    },
+    next: () => {
+      if (index0 >= array0.length) {
+        return iterationDone;
+      }
+      if (index1 >= array1.length) {
+        index0++;
+        index1 = 0;
+      }
+      if (index0 >= array0.length) {
+        return iterationDone;
+      }
+      return {
+        done: false,
+        value: [array0[index0], array1[index1++]],
+      };
+    },
+  };
+
+  return funcIterator(iterator);
+}
+
 export default funcIterator;

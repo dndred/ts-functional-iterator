@@ -1,6 +1,6 @@
 {
   "name": "functional-iterator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Python-like iterator for JavaScript.\nThe library implements lazy iteration over arrays and provides functions `.map`, `.filter`, and `.reduce` on the iterator.\nChaining doesn't copy arrays on each step and doesn't waste memory. Real calculations perform only on actual data consuming - on reduce, join, and toArray calls.",
   "types": "dist/index.d.ts",
   "files": [
