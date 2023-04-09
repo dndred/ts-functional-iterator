@@ -131,32 +131,68 @@ const funcIterator = <T>(iterable: IterableIterator<T> | ArrayLike<T>): FuncIter
   return new FuncIterator(iterable);
 };
 
-export function product<T0, T1>(array0: ArrayLike<T0>, array1: ArrayLike<T1>): FuncIterator<[T0, T1]> {
-  let index0 = 0;
-  let index1 = 0;
-  const iterator: IterableIterator<[T0, T1]> = {
-    [Symbol.iterator](): IterableIterator<[T0, T1]> {
+function productAny(arrays: ArrayLike<unknown>[]): FuncIterator<ArrayLike<unknown>> {
+  if (!arrays.some((array) => array.length > 0)) {
+    return funcIterator([]);
+  }
+
+  // pointer to next value for each array
+  let indexes = Array<number>(arrays.length).fill(0);
+  let done = false;
+
+  const iterator: IterableIterator<ArrayLike<unknown>> = {
+    [Symbol.iterator](): IterableIterator<ArrayLike<unknown>> {
       return iterator;
     },
     next: () => {
-      if (index0 >= array0.length) {
-        return iterationDone;
-      }
-      if (index1 >= array1.length) {
-        index0++;
-        index1 = 0;
-      }
-      if (index0 >= array0.length) {
-        return iterationDone;
-      }
+      if (done) return iterationDone;
+
+      const value = arrays.map((array, arrayIdx) => array[indexes[arrayIdx]]);
+      let isIncremented = true;
+      indexes = indexes.map((index, arrayIdx) => {
+        // index already incremented, return rest unchanged
+        if (!isIncremented) return index;
+
+        // check if next index is out of bounds
+        if (index + 1 >= arrays[arrayIdx].length) {
+          return 0;
+        }
+        isIncremented = false;
+        return index + 1;
+      });
+      done = isIncremented;
+
       return {
         done: false,
-        value: [array0[index0], array1[index1++]],
+        value,
       };
     },
   };
 
   return funcIterator(iterator);
 }
+
+export const product2 = <T0, T1>(array0: ArrayLike<T0>, array1: ArrayLike<T1>): FuncIterator<[T0, T1]> => {
+  return productAny([array0, array1]) as FuncIterator<[T0, T1]>;
+};
+
+export const product = product2;
+
+export const product3 = <T0, T1, T2>(
+  array0: ArrayLike<T0>,
+  array1: ArrayLike<T1>,
+  array2: ArrayLike<T2>,
+): FuncIterator<[T0, T1, T2]> => {
+  return productAny([array0, array1, array2]) as FuncIterator<[T0, T1, T2]>;
+};
+
+export const product4 = <T0, T1, T2, T3>(
+  array0: ArrayLike<T0>,
+  array1: ArrayLike<T1>,
+  array2: ArrayLike<T2>,
+  array3: ArrayLike<T3>,
+): FuncIterator<[T0, T1, T2, T3]> => {
+  return productAny([array0, array1, array2, array3]) as FuncIterator<[T0, T1, T2, T3]>;
+};
 
 export default funcIterator;
