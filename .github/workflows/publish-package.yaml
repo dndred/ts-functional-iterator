@@ -1,6 +1,7 @@
 name: Publish Package to npmjs
 release:
   types: [published]
+
 jobs:
   build:
     name: Test
@@ -12,6 +13,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
+          registry-url: https://npm.pkg.github.com/
           node-version: '18'
           check-latest: true
           cache: 'yarn'
