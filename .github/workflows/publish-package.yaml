@@ -22,7 +22,7 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - run: yarn build:release
-      - run: npm version --no-git-tag-version 0.0.${PR_NUMBER}-dev
+      - run: npm version --no-git-tag-version 0.0.`date +%s`-pr-${PR_NUMBER}-dev
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
