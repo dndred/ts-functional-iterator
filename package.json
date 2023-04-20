@@ -35,8 +35,7 @@
     "lint": "prettier . -l --cache && eslint src/**/*.ts",
     "fix": "eslint src/**/*.ts --fix && prettier . --write --cache",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "prepare": "husky install"
+    "test:watch": "jest --watch"
   },
   "author": "Andrei Danilov <dndred@gmail.com>",
   "license": "GPL",
