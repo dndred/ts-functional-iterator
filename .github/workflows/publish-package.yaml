@@ -29,9 +29,9 @@ jobs:
       - run: npm version --no-git-tag-version ${{ steps.version_number.outputs.version_number }}
       - run: npm publish
 
-      - name: Notify about PR test URL
+      - name: Notify about test package version
         if: env.PR_ACTION != 'closed'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Test version: <${{ steps.version_number.outputs.version_number }}>
+            Dev version published, run `yarn add ts-iterator:${{ steps.version_number.outputs.version_number }}` to use it.
