@@ -25,6 +25,13 @@ jobs:
       - run: yarn build:release
       - name: Generate version number
         id: version_number
-        run: echo "version_number=0.0.`date +%s`-pr-${PR_NUMBER}-dev" >> $GITHUB_OUTPUT
+        run: echo "version_number=0.0.`date +%Y%m%d%H%M%S`-pr-${PR_NUMBER}-dev" >> $GITHUB_OUTPUT
       - run: npm version --no-git-tag-version ${{ steps.version_number.outputs.version_number }}
       - run: npm publish
+
+      - name: Notify about PR test URL
+        if: env.PR_ACTION != 'closed'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Test version: <${{ steps.version_number.outputs.version_number }}>
