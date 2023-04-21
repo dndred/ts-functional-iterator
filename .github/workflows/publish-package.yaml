@@ -1,10 +1,13 @@
 name: Publish Package to npmjs
-on: [push]
+on: pull_request
 
 jobs:
   build:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,6 +23,15 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - run: yarn build:release
+      - name: Generate version number
+        id: version_number
+        run: echo "version_number=0.0.`date +%Y%m%d%H%M%S`-pr-${PR_NUMBER}-dev" >> $GITHUB_OUTPUT
+      - run: npm version --no-git-tag-version ${{ steps.version_number.outputs.version_number }}
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Notify about test package version
+        if: env.PR_ACTION != 'closed'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Dev version published, run `yarn add ts-iterator:${{ steps.version_number.outputs.version_number }}` to use it.
