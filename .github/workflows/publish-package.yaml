@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -22,7 +23,8 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - run: yarn build:release
-      - run: npm version --no-git-tag-version 0.0.`date +%s`-pr-${PR_NUMBER}-dev
+      - name: Generate version number
+        id: version_number
+        run: echo "version_number=0.0.`date +%s`-pr-${PR_NUMBER}-dev" >> $GITHUB_OUTPUT
+      - run: npm version --no-git-tag-version ${{ steps.version_number.outputs.version_number }}
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
